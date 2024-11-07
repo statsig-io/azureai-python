@@ -24,7 +24,7 @@ jobs:
           pip install .[test]
 
       - name: Run Linter
-        run: pylint ./statsig --rcfile .pylintrc
+        run: pylint ./azureai --rcfile .pylintrc
 
       - name: Run Tests
         run: python3 -m unittest discover -s ./tests --verbose
