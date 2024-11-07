@@ -24,30 +24,33 @@ class InvokeContext:
 
 
 class ModelClient:
-    def __init__(self, endpoint: str, api_key: str, completion_defaults: Optional[dict] = {}):
+    def __init__(self, endpoint: str, api_key: str, completion_defaults: Optional[dict] = None):
         self.completion_defaults = completion_defaults
         self.completions_client = ChatCompletionsClient(
             endpoint=endpoint,
             credential=AzureKeyCredential(api_key),
-            **completion_defaults
+            **(completion_defaults or {})
         )
         self.embeddings_client = EmbeddingsClient(
             endpoint=endpoint,
             credential=AzureKeyCredential(api_key),
-            **completion_defaults
+            **(completion_defaults or {})
         )
 
     def complete(
         self,
         messages: List[ChatRequestMessage],
-        options: Optional[dict] = {},
+        options: Optional[dict] = None,
         user: Optional[StatsigUser] = None
     ) -> Optional[ChatCompletions]:
         def task():
             invoke_context = self.log_invoke(user, "complete")
-            res = self.completions_client.complete(stream=False, messages=messages, **options)
+            res = self.completions_client.complete(
+                stream=False,
+                messages=messages,
+                **(options or {})
+            )
 
-            self.handle_errors(res)
             self.log_usage(
                 user,
                 "complete",
@@ -66,12 +69,16 @@ class ModelClient:
     def stream_complete(
         self,
         messages: List[ChatRequestMessage],
-        options: Optional[dict] = {},
+        options: Optional[dict] = None,
         user: Optional[StatsigUser] = None
     ) -> Optional[Iterable[StreamingChatCompletionsUpdate]]:
         def task():
             invoke_context = self.log_invoke(user, "stream")
-            res = self.completions_client.complete(stream=True, messages=messages, **options)
+            res = self.completions_client.complete(
+                stream=True,
+                messages=messages,
+                **(options or {})
+            )
 
             self.log_usage(user, "stream_begin", {}, invoke_context)
             stream_start_ms = round(time.time() * 1000)
@@ -110,15 +117,14 @@ class ModelClient:
 
     def get_embeddings(
         self,
-        input: List[EmbeddingInput],
-        options: Optional[dict] = {},
+        inputs: List[EmbeddingInput],
+        options: Optional[dict] = None,
         user: Optional[StatsigUser] = None,
     ) -> Optional[EmbeddingsResult]:
         def task():
             invoke_context = self.log_invoke(user, "getEmbeddings")
-            res = self.embeddings_client.embed(input=input, **options)
+            res = self.embeddings_client.embed(input=inputs, **(options or {}))
 
-            self.handle_errors(res)
             self.log_usage(
                 user,
                 "getEmbeddings",
