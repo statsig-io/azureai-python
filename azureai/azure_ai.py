@@ -25,7 +25,7 @@ class AzureAI:
         config = statsig.get_config(get_statsig_user(), config_name)
         endpoint = config.get_typed("endpoint", default_endpoint)
         api_key = config.get_typed("key", default_key)
-        completion_defaults = config.get_typed("api_version", {})
+        completion_defaults = config.get_typed("completion_defaults", {})
 
         return ModelClient(
             endpoint=endpoint,
