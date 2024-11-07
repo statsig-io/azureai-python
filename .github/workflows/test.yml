@@ -1,0 +1,37 @@
+name: tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install Deps
+        run: |
+          pip install pylint
+          pip install -r requirements.txt
+          pip install .[test]
+
+      - name: Run Linter
+        run: pylint ./statsig --rcfile .pylintrc
+
+      - name: Run Tests
+        run: python3 -m unittest discover -s ./tests --verbose
+        env:
+          ENVIRONMENT_TIER: "staging"
+          STATSIG_SERVER_KEY: ${{ secrets.STATSIG_SERVER_KEY }}
+          EMBEDDINGS_DEPLOYMENT_ENDPOINT_URL: ${{ secrets.DEPLOYMENT_ENDPOINT_URL }}
+          EMBEDDINGS_DEPLOYMENT_KEY: ${{ secrets.DEPLOYMENT_KEY }}
+
+

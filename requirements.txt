@@ -1,0 +1,3 @@
+statsig==0.48.0
+azure-ai-ml==1.21.1
+azure-identity==1.19.0
