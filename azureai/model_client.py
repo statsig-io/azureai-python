@@ -1,6 +1,6 @@
 import time
 
-from typing import Dict, Iterable, List, Optional, Union, Callable
+from typing import Dict, Iterable, List, Optional, Union, Callable, TypeVar
 from azure.ai.inference import ChatCompletionsClient, EmbeddingsClient
 from azure.ai.inference.models._models import (
     ChatRequestMessage,
@@ -15,6 +15,7 @@ from azure.core.exceptions import HttpResponseError
 from statsig import statsig, StatsigUser, StatsigEvent
 from .get_statsig_user import get_statsig_user
 
+T = TypeVar( "T" )
 
 class InvokeContext:
     invoke_time: float
@@ -139,7 +140,7 @@ class ModelClient:
             return res
         return self.handle_errors(task=task, fallback=None)
 
-    def handle_errors[T](self, task: Callable[[], T], fallback: T) -> T:
+    def handle_errors(self, task: Callable[[], T], fallback: T) -> T:
         try:
             return task()
         except HttpResponseError as e:
