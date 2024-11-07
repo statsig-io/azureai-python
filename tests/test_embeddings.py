@@ -24,7 +24,7 @@ class TestEmbeddings(unittest.TestCase):
         response = self.client.get_embeddings(["Hello, world!", "Goodbye, world!"])
         self.assertIsNotNone(response, "Expected response to not be None")
         self.assertGreater(len(response.data), 0, "Expected at least 1 embedding")
-        print() # newline
+        print()  # newline
         for item in response.data:
             length = len(item.embedding)
             print(

@@ -28,12 +28,11 @@ class TestCompletions(unittest.TestCase):
             UserMessage(content="Give me 5 good reasons why I should exercise every day.")
         ])
         self.assertIsNotNone(response, "Expected response to not be None")
-        print() # newline
+        print()  # newline
         for item in response.choices:
             content = item.message.content
             self.assertGreater(len(content), 0, "Expected non-empty content")
             print(content)
-
 
     def test_completions_stream(self):
         response = self.client.stream_complete([
@@ -41,7 +40,7 @@ class TestCompletions(unittest.TestCase):
             UserMessage(content="Give me 5 good reasons why I should exercise every day.")
         ])
         self.assertIsNotNone(response, "Expected response to not be None")
-        print() # newline
+        print()  # newline
         for update in response:
             content = update.choices[0].delta.content or ""
             self.assertGreater(len(content), 0, "Expected non-empty content")
