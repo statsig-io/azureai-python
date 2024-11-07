@@ -25,8 +25,7 @@ setup(
     ],
     install_requires=[
         'statsig',
-        'azure-ai-ml',
-        'azure-identity'
+        'azure-ai-inference',
     ],
     include_package_data=True,
     packages=['azureai'],
