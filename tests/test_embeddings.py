@@ -2,7 +2,6 @@ import os
 import unittest
 
 from statsig.statsig_options import StatsigOptions
-from azureai.model_client import ModelClient
 from azureai.azure_ai import AzureAI
 
 STATSIG_SERVER_KEY = os.environ["STATSIG_SERVER_KEY"]
@@ -14,7 +13,7 @@ class TestEmbeddings(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         AzureAI.initialize(STATSIG_SERVER_KEY, StatsigOptions(tier="development"))
-        cls.client = ModelClient(DEPLOYMENT_ENDPOINT_URL, DEPLOYMENT_KEY)
+        cls.client = AzureAI.get_model_client_from_endpoint(DEPLOYMENT_ENDPOINT_URL, DEPLOYMENT_KEY)
 
     @classmethod
     def tearDownClass(cls) -> None:

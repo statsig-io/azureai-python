@@ -3,7 +3,6 @@ import unittest
 
 from statsig.statsig_options import StatsigOptions
 from azure.ai.inference.models import SystemMessage, UserMessage
-from azureai.model_client import ModelClient
 from azureai.azure_ai import AzureAI
 
 ENVIRONMENT_TIER = os.environ["ENVIRONMENT_TIER"]
@@ -16,7 +15,7 @@ class TestCompletions(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         AzureAI.initialize(STATSIG_SERVER_KEY, StatsigOptions(tier=ENVIRONMENT_TIER))
-        cls.client = ModelClient(DEPLOYMENT_ENDPOINT_URL, DEPLOYMENT_KEY)
+        cls.client = AzureAI.get_model_client_from_endpoint(DEPLOYMENT_ENDPOINT_URL, DEPLOYMENT_KEY)
 
     @classmethod
     def tearDownClass(cls) -> None:

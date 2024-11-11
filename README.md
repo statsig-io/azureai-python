@@ -11,9 +11,13 @@ Statsig helps you move faster with Feature Gates (Feature Flags) and Dynamic Con
 ```python
 AzureAI.initialize(<STATSIG_SERVER_KEY>, StatsigOptions(tier="development"))
 ```
-3. Initialize the AzureAI client
+3. Create the AzureAI inference client
 ```python
-client = ModelClient(<DEPLOYMENT_ENDPOINT_URL>, <DEPLOYMENT_KEY>)
+client = AzureAI.get_model_client_from_endpoint(<DEPLOYMENT_ENDPOINT_URL>, <DEPLOYMENT_KEY>)
+```
+Optionally, use a Statsig Dynamic Config to provide default configurations
+```python
+client = AzureAI.get_model_client("azureai_model", <DEPLOYMENT_ENDPOINT_URL>, <DEPLOYMENT_KEY>)
 ```
 4. Call the API
 ```python
@@ -22,3 +26,7 @@ response = client.complete([
     UserMessage(content="Give me 5 good reasons why I should exercise every day.")
 ])
 ```
+
+## References
+- Azure AI SDK [documentation](https://learn.microsoft.com/en-us/python/api/overview/azure/ai-inference-readme?view=azure-python-preview)
+- Statsig SDK [documentation](https://docs.statsig.com/server/pythonSDK/)
