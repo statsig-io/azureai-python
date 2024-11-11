@@ -1,7 +1,6 @@
 import time
 
 from typing import Dict, Iterable, List, Optional, Union, Callable, TypeVar
-from itertools import tee
 from azure.ai.inference import ChatCompletionsClient, EmbeddingsClient
 from azure.ai.inference.models._models import (
     ChatRequestMessage,
