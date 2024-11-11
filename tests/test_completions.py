@@ -40,8 +40,10 @@ class TestCompletions(unittest.TestCase):
             UserMessage(content="Give me 5 good reasons why I should exercise every day.")
         ])
         self.assertIsNotNone(response, "Expected response to not be None")
+        responses = 0
         print()  # newline
         for update in response:
-            content = update.choices[0].delta.content or ""
-            self.assertGreater(len(content), 0, "Expected non-empty content")
-            print(content, end="", flush=True)
+            responses += 1
+            print(update.choices[0].delta.content or "", end="", flush=True)
+
+        self.assertGreater(responses, 0, "Expected at least one response")

@@ -1,6 +1,7 @@
 import time
 
 from typing import Dict, Iterable, List, Optional, Union, Callable, TypeVar
+from itertools import tee
 from azure.ai.inference import ChatCompletionsClient, EmbeddingsClient
 from azure.ai.inference.models._models import (
     ChatRequestMessage,
@@ -15,7 +16,8 @@ from azure.core.exceptions import HttpResponseError
 from statsig import statsig, StatsigUser, StatsigEvent
 from .get_statsig_user import get_statsig_user
 
-T = TypeVar( "T" )
+T = TypeVar("T")
+
 
 class InvokeContext:
     invoke_time: float
@@ -71,30 +73,15 @@ class ModelClient:
         self,
         messages: List[ChatRequestMessage],
         options: Optional[dict] = None,
-        user: Optional[StatsigUser] = None
     ) -> Optional[Iterable[StreamingChatCompletionsUpdate]]:
         def task():
-            invoke_context = self.log_invoke(user, "stream")
             res = self.completions_client.complete(
                 stream=True,
                 messages=messages,
                 **(options or {})
             )
 
-            self.log_usage(user, "stream_begin", {}, invoke_context)
-            stream_start_ms = round(time.time() * 1000)
-            model = None
-            for update in res:
-                model = update.model
-            self.log_usage(
-                user,
-                "stream_end",
-                {
-                    "stream_time_ms": round(time.time() * 1000) - stream_start_ms,
-                    "model": model
-                },
-                invoke_context
-            )
+            # TODO: Handle event logging
             return res
         return self.handle_errors(task=task, fallback=None)
 
