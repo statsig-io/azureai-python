@@ -14,7 +14,7 @@ setup(
     long_description=README,
     long_description_content_type="text/markdown",
     author='Statsig',
-    author_email='support@statsig.io',
+    author_email='support@statsig.com',
     url='https://github.com/statsig-io/azureai-python',
     license='ISC',
     classifiers=[
