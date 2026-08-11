@@ -13,8 +13,8 @@ setup(
     description='Statsig wrapped Azure AI inference library',
     long_description=README,
     long_description_content_type="text/markdown",
-    author='Kenny Yi',
-    author_email='kenny@statsig.com',
+    author='Statsig',
+    author_email='support@statsig.io',
     url='https://github.com/statsig-io/azureai-python',
     license='ISC',
     classifiers=[
